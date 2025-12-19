@@ -2,7 +2,7 @@
 FROM alpine:latest AS downloader
 
 # Argument to easily upgrade PocketBase versions later
-ARG PB_VERSION=0.32.2
+ARG PB_VERSION=0.34.2
 
 WORKDIR /app
 
