@@ -13,7 +13,7 @@ RUN unzip /tmp/pb.zip -d /pb/
 # Create a data directory to ensure it exists and we can mount a volume to it
 RUN mkdir -p /pb/pb_data
 
-EXPOSE 8080
+EXPOSE 443
 
 # start PocketBase
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080", "--dir=/pb/pb_data"]
+CMD ["/pb/pocketbase", "serve", "--https=0.0.0.0:443", "--dir=/pb/pb_data"]
