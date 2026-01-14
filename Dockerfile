@@ -1,25 +1,19 @@
 FROM alpine:latest
 
-ARG PB_VERSION=0.35.0
+ARG PB_VERSION=0.35.1
 
 RUN apk add --no-cache \
     unzip \
-    ca-certificates \
-    curl
+    ca-certificates
 
-RUN adduser -s /bin/sh -D -h /pb pocketbase
-
+# download and unzip PocketBase
 ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
+RUN unzip /tmp/pb.zip -d /pb/
 
-RUN unzip /tmp/pb.zip -d /pb/ && \
-    rm /tmp/pb.zip && \
-    chown -R pocketbase:pocketbase /pb
+# Create a data directory to ensure it exists and we can mount a volume to it
+RUN mkdir -p /pb/pb_data
 
-USER pocketbase
+EXPOSE 8080
 
-EXPOSE 8090
-
-HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD curl -f http://0.0.0.0:8090/api/health || exit 1
-
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
+# start PocketBase
+CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080", "--dir=/pb/pb_data"]
