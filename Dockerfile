@@ -17,13 +17,9 @@ RUN unzip /tmp/pb.zip -d /pb/ && \
 
 USER pocketbase
 
-COPY --chown=pocketbase:pocketbase ./pb_migrations /pb/pb_migrations
-COPY --chown=pocketbase:pocketbase ./pb_hooks /pb/pb_hooks
-COPY --chown=pocketbase:pocketbase ./pb_public /pb/pb_public
-
-EXPOSE 8080
+EXPOSE 8090
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8080/api/health || exit 1
+    CMD curl -f http://0.0.0.0:8090/api/health || exit 1
 
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080"]
+CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
